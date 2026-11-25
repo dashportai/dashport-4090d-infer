@@ -1,0 +1,250 @@
+diff --git b/sglang-xgrammar-lmhead-sm89/csrc/active_row_lm_head_sm89.cu a/sglang-xgrammar-lmhead-sm89/csrc/active_row_lm_head_sm89.cu
+index e72bcd2..4cd0da7 100644
+--- b/sglang-xgrammar-lmhead-sm89/csrc/active_row_lm_head_sm89.cu
++++ a/sglang-xgrammar-lmhead-sm89/csrc/active_row_lm_head_sm89.cu
+@@ -118,7 +118,7 @@ active_row_lm_head_sm89_kernel(
+     __shared__ int s_warp_offsets[4];
+     __shared__ int s_total_active;
+     __shared__ uint8_t s_active_rows[kTileN];
+-    __shared__ uint8_t s_row_m_lanes[4][32];
++    __shared__ uint8_t s_row_m_list[4][kMaxSmemM];
+
+     uint32_t local_u0 = 0u, local_u1 = 0u, local_u2 = 0u, local_u3 = 0u;
+     for (int m = tid; m < M; m += kBlockThreads) {
+@@ -236,17 +236,16 @@ active_row_lm_head_sm89_kernel(
+
+             const int m_pos = __popc(mb & ((lane == 0) ? 0u : ((1u << lane) - 1u)));
+             if (allow_m) {
+-                // Compact within this 32-row block so global indices never narrow.
+-                s_row_m_lanes[warp_id][m_pos] = static_cast<uint8_t>(lane);
++                s_row_m_list[warp_id][m_pos] = static_cast<uint8_t>(m);
+             }
+             __syncwarp();
+
+             for (int m0 = 0; m0 < n_m; m0 += kMChunk) {
+                 const int m_cnt = (m0 + kMChunk <= n_m) ? kMChunk : (n_m - m0);
+-                int m_idx[kMChunk];
++                uint8_t m_idx[kMChunk];
+                 #pragma unroll
+                 for (int j = 0; j < kMChunk; ++j) {
+-                    m_idx[j] = (j < m_cnt) ? m_blk + s_row_m_lanes[warp_id][m0 + j] : 0;
++                    m_idx[j] = (j < m_cnt) ? s_row_m_list[warp_id][m0 + j] : 0;
+                 }
+
+                 float acc[kMChunk];
+diff --git b/sglang-xgrammar-lmhead-sm89/sglang_xgrammar_lmhead_sm89/in_draft_xgrammar.py a/sglang-xgrammar-lmhead-sm89/sglang_xgrammar_lmhead_sm89/in_draft_xgrammar.py
+index 5757b86..e8980cc 100644
+--- b/sglang-xgrammar-lmhead-sm89/sglang_xgrammar_lmhead_sm89/in_draft_xgrammar.py
++++ a/sglang-xgrammar-lmhead-sm89/sglang_xgrammar_lmhead_sm89/in_draft_xgrammar.py
+@@ -1,7 +1,8 @@
+-"""Overlap-safe greedy in-draft xgrammar masking with guaranteed rollback."""
++"""Overlap-safe in-draft xgrammar masking and guaranteed rollback for DFlash2."""
+
+ from __future__ import annotations
+
++import logging
+ import os
+ import threading
+ from typing import Any, Callable, Optional, Tuple
+@@ -9,6 +10,8 @@ from typing import Any, Callable, Optional, Tuple
+ import numpy as np
+ import torch
+
++logger = logging.getLogger(__name__)
++
+
+ class _StepContextTLS(threading.local):
+     def __init__(self) -> None:
+@@ -63,13 +66,17 @@ def refine_draft_block_with_grammar(
+     reqs: list[Any],
+     draft_cpu: torch.Tensor,
+     cand_cpu: Optional[torch.Tensor],
++    q_cpu: Optional[torch.Tensor],
++    greedy_flags: Optional[list[bool]],
+     vocab_size: int,
+     allow_forced_single: bool = True,
+-) -> bool:
+-    """Refine greedy draft proposals and roll the grammar back to its committed prefix.
++) -> Tuple[bool, bool]:
++    """Enforce xgrammar constraints sequentially over drafted positions 1..block_size-1.
++
++    Mutates ``draft_cpu`` (and ``cand_cpu`` / ``q_cpu`` when non-greedy sampling is active)
++    in-place and ALWAYS rolls back ``req.grammar`` to the exact committed prefix state.
+
+-    The caller must pass only an all-greedy verification batch. The returned flag
+-    indicates whether any proposal in ``draft_cpu`` was changed in place.
++    Returns ``(draft_modified, q_modified)``.
+     """
+     bs, block_size = int(draft_cpu.shape[0]), int(draft_cpu.shape[1])
+     vocab_words = (vocab_size + 31) // 32
+@@ -77,6 +84,7 @@ def refine_draft_block_with_grammar(
+     mask_np = scratch_mask[0].numpy()
+
+     draft_modified = False
++    q_modified = False
+
+     for i in range(bs):
+         req = reqs[i]
+@@ -84,6 +92,7 @@ def refine_draft_block_with_grammar(
+         if grammar is None or grammar.is_terminated():
+             continue
+
++        is_greedy = True if (greedy_flags is None or i >= len(greedy_flags)) else greedy_flags[i]
+         accepted_cnt = 0
+         try:
+             for pos in range(1, block_size):
+@@ -93,33 +102,80 @@ def refine_draft_block_with_grammar(
+                 grammar.fill_vocab_mask(scratch_mask, 0)
+
+                 cur_tok = int(draft_cpu[i, pos].item())
+-                chosen = find_unique_allowed_token(mask_np, vocab_size) if allow_forced_single else -1
+-                if chosen < 0:
+-                    if is_token_allowed(mask_np, cur_tok, vocab_size):
+-                        chosen = cur_tok
+-                    elif cand_cpu is not None:
+-                        chosen = next(
+-                            (
+-                                tok
+-                                for tok in cand_cpu[i, pos - 1].tolist()
+-                                if is_token_allowed(mask_np, tok, vocab_size)
+-                            ),
+-                            -1,
+-                        )
+-                if chosen < 0:
++                u_tok = find_unique_allowed_token(mask_np, vocab_size) if allow_forced_single else -1
++
++                if u_tok >= 0:
++                    chosen = u_tok
++                    if chosen != cur_tok:
++                        draft_cpu[i, pos] = chosen
++                        draft_modified = True
++                        if not is_greedy and cand_cpu is not None and q_cpu is not None:
++                            cand_cpu[i, pos - 1, 0] = chosen
++                            q_cpu[i, pos - 1].zero_()
++                            q_cpu[i, pos - 1, 0] = 1.0
++                            q_modified = True
++                    grammar.accept_token(chosen)
++                    accepted_cnt += 1
++                    continue
++
++                if is_token_allowed(mask_np, cur_tok, vocab_size):
++                    grammar.accept_token(cur_tok)
++                    accepted_cnt += 1
++                    continue
++
++                # Drafted token violated xgrammar -> pick highest-ranked legal candidate.
++                if cand_cpu is None:
++                    break
++                row_cands = cand_cpu[i, pos - 1]
++                legal_idx = [
++                    idx
++                    for idx in range(int(row_cands.shape[0]))
++                    if is_token_allowed(mask_np, int(row_cands[idx].item()), vocab_size)
++                ]
++                if not legal_idx:
+                     break
+
+-                grammar.accept_token(chosen)
+-                accepted_cnt += 1
+-                if chosen != cur_tok:
++                if is_greedy or q_cpu is None:
++                    best_tok = int(row_cands[legal_idx[0]].item())
++                    draft_cpu[i, pos] = best_tok
++                    draft_modified = True
++                    grammar.accept_token(best_tok)
++                    accepted_cnt += 1
++                else:
++                    q_row = q_cpu[i, pos - 1]
++                    q_legal = q_row[legal_idx].clamp_min(0.0)
++                    q_sum = float(q_legal.sum().item())
++                    if q_sum > 0.0:
++                        probs = q_legal / q_sum
++                        sel = int(torch.multinomial(probs, num_samples=1).item())
++                        chosen = int(row_cands[legal_idx[sel]].item())
++                        q_row.zero_()
++                        q_row[legal_idx] = probs
++                    else:
++                        chosen = int(row_cands[legal_idx[0]].item())
++                        q_row.zero_()
++                        q_row[legal_idx[0]] = 1.0
+                     draft_cpu[i, pos] = chosen
+                     draft_modified = True
++                    q_modified = True
++                    grammar.accept_token(chosen)
++                    accepted_cnt += 1
+         finally:
+             # Guard accepted_cnt > 0: XGrammarGrammar.rollback(0) slices [:-0] -> []!
+             if accepted_cnt > 0:
+                 grammar.rollback(accepted_cnt)
+
+-    return draft_modified
++    return draft_modified, q_modified
++
++
++def _resolve_greedy_flags(sampling_info, bs: int) -> Optional[list[bool]]:
++    if sampling_info is None or getattr(sampling_info, "is_all_greedy", True):
++        return [True] * bs
++    temps = getattr(sampling_info, "temperatures", None)
++    if temps is None:
++        return [True] * bs
++    temps_cpu = temps.view(-1)[:bs].detach().cpu().tolist()
++    return [float(t) <= 0.0 for t in temps_cpu]
+
+
+ def around_dflash_forward_batch_generation(original_fn, worker, *args, **kwargs):
+@@ -142,12 +198,6 @@ def around_grammar_tree_from_linear_chain(original_fn, cls, verify_ids_2d: torch
+     if not getattr(batch, "has_grammar", False):
+         return original_fn(cls, verify_ids_2d)
+
+-    # SGLang chooses sampled verification at the batch level. Rewriting the
+-    # drawn tokens after sampling can desynchronize them from the proposal q
+-    # used by verification, including when a greedy row shares that batch.
+-    if not getattr(getattr(batch, "sampling_info", None), "is_all_greedy", False):
+-        return original_fn(cls, verify_ids_2d)
+-
+     if grammar_barrier is not None:
+         grammar_barrier()
+
+@@ -164,6 +214,8 @@ def around_grammar_tree_from_linear_chain(original_fn, cls, verify_ids_2d: torch
+
+     sampler = getattr(worker, "_draft_sampler", None)
+     cand_gpu = getattr(sampler, "candidate_out", None)
++    q_gpu = getattr(sampler, "q_out", None)
++    selector_sample = getattr(worker, "_selector_sample", None)
+
+     draft_cpu = verify_ids_2d[:bs].detach().to("cpu", non_blocking=False).clone()
+     cand_cpu = (
+@@ -171,18 +223,31 @@ def around_grammar_tree_from_linear_chain(original_fn, cls, verify_ids_2d: torch
+         if cand_gpu is not None
+         else None
+     )
++    use_sampled = selector_sample is not None and q_gpu is not None
++    q_cpu = (
++        q_gpu[:bs].detach().to("cpu", non_blocking=False).clone()
++        if use_sampled
++        else None
++    )
++
+     vocab_size = int(worker.target_worker.model_runner.model_config.vocab_size)
++    greedy_flags = _resolve_greedy_flags(getattr(batch, "sampling_info", None), bs)
+     allow_forced = os.getenv("SGLANG_XGRAMMAR_JUMP_FORWARD", "1").strip() != "0"
+
+-    draft_modified = refine_draft_block_with_grammar(
++    draft_mod, q_mod = refine_draft_block_with_grammar(
+         reqs=reqs[:bs],
+         draft_cpu=draft_cpu,
+         cand_cpu=cand_cpu,
++        q_cpu=q_cpu,
++        greedy_flags=greedy_flags,
+         vocab_size=vocab_size,
+         allow_forced_single=allow_forced,
+     )
+
+-    if draft_modified:
++    if draft_mod:
+         verify_ids_2d[:bs, 1:].copy_(draft_cpu[:, 1:].to(verify_ids_2d.device))
++    if q_mod and sampler is not None and cand_cpu is not None and q_cpu is not None:
++        sampler.candidate_out[:bs].copy_(cand_cpu.to(sampler.candidate_out.device))
++        sampler.q_out[:bs].copy_(q_cpu.to(sampler.q_out.device))
+
+     return original_fn(cls, verify_ids_2d)

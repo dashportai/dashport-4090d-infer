@@ -1,0 +1,1558 @@
+{
+  "config": {
+    "model": "qwen3.8-27b-fp8",
+    "pairs": 4,
+    "iterations": 2,
+    "concurrency": 2,
+    "seed": 4417,
+    "run_id": "cb687ab9cd904a5fb5ca93731af1bfc5",
+    "catalog_bytes": 7133,
+    "requests": 64,
+    "dry_run": false
+  },
+  "arm_orders": [
+    [
+      "catalog_first",
+      "volatile_first"
+    ],
+    [
+      "volatile_first",
+      "catalog_first"
+    ],
+    [
+      "volatile_first",
+      "catalog_first"
+    ],
+    [
+      "catalog_first",
+      "volatile_first"
+    ]
+  ],
+  "trials": [
+    {
+      "pair": 0,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1945.438,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 943
+            }
+          },
+          "ttft_ms": 632.881,
+          "frame_gaps_ms": [
+            300.698,
+            38.654,
+            36.102
+          ],
+          "wall_ms": 1008.423,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 8432
+          },
+          "ttft_ms": 865.173,
+          "frame_gaps_ms": [
+            33.639,
+            37.562
+          ],
+          "wall_ms": 936.536,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1944.942,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 543
+            }
+          },
+          "ttft_ms": 923.858,
+          "frame_gaps_ms": [
+            9.102,
+            38.608,
+            36.672
+          ],
+          "wall_ms": 1008.309,
+          "prompt_tokens": 1476,
+          "cached_tokens": 0,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3110
+          },
+          "ttft_ms": 864.972,
+          "frame_gaps_ms": [
+            33.55,
+            37.767
+          ],
+          "wall_ms": 936.353,
+          "prompt_tokens": 1495,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 419.652,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 121
+            }
+          },
+          "ttft_ms": 113.988,
+          "frame_gaps_ms": [
+            37.515,
+            38.922,
+            36.913
+          ],
+          "wall_ms": 227.522,
+          "prompt_tokens": 1476,
+          "cached_tokens": 1408,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 1488
+          },
+          "ttft_ms": 119.164,
+          "frame_gaps_ms": [
+            34.582,
+            37.955
+          ],
+          "wall_ms": 191.89,
+          "prompt_tokens": 1495,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 419.65,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 273
+            }
+          },
+          "ttft_ms": 114.199,
+          "frame_gaps_ms": [
+            37.196,
+            38.887,
+            37.324
+          ],
+          "wall_ms": 227.656,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2551
+          },
+          "ttft_ms": 118.985,
+          "frame_gaps_ms": [
+            34.402,
+            38.369
+          ],
+          "wall_ms": 191.808,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1921.024,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 943
+            }
+          },
+          "ttft_ms": 867.37,
+          "frame_gaps_ms": [
+            36.809,
+            37.991,
+            37.909
+          ],
+          "wall_ms": 980.248,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 8432
+          },
+          "ttft_ms": 868.069,
+          "frame_gaps_ms": [
+            34.684,
+            37.598
+          ],
+          "wall_ms": 940.531,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1921.063,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 543
+            }
+          },
+          "ttft_ms": 867.273,
+          "frame_gaps_ms": [
+            36.723,
+            38.047,
+            38.299
+          ],
+          "wall_ms": 980.399,
+          "prompt_tokens": 1476,
+          "cached_tokens": 0,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3110
+          },
+          "ttft_ms": 867.868,
+          "frame_gaps_ms": [
+            34.599,
+            37.938
+          ],
+          "wall_ms": 940.469,
+          "prompt_tokens": 1495,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1842.545,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 121
+            }
+          },
+          "ttft_ms": 825.891,
+          "frame_gaps_ms": [
+            37.643,
+            38.644,
+            37.381
+          ],
+          "wall_ms": 939.755,
+          "prompt_tokens": 1476,
+          "cached_tokens": 64,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 1488
+          },
+          "ttft_ms": 830.313,
+          "frame_gaps_ms": [
+            34.573,
+            37.573
+          ],
+          "wall_ms": 902.535,
+          "prompt_tokens": 1495,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1842.53,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 273
+            }
+          },
+          "ttft_ms": 825.857,
+          "frame_gaps_ms": [
+            37.569,
+            38.441,
+            37.872
+          ],
+          "wall_ms": 939.825,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2551
+          },
+          "ttft_ms": 830.134,
+          "frame_gaps_ms": [
+            34.395,
+            37.853
+          ],
+          "wall_ms": 902.439,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1921.506,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 929
+            }
+          },
+          "ttft_ms": 864.965,
+          "frame_gaps_ms": [
+            37.954,
+            38.573,
+            37.265
+          ],
+          "wall_ms": 979.04,
+          "prompt_tokens": 1476,
+          "cached_tokens": 0,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2180
+          },
+          "ttft_ms": 869.17,
+          "frame_gaps_ms": [
+            35.031,
+            37.849
+          ],
+          "wall_ms": 942.236,
+          "prompt_tokens": 1495,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1921.529,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 983
+            }
+          },
+          "ttft_ms": 864.964,
+          "frame_gaps_ms": [
+            37.848,
+            38.404,
+            37.874
+          ],
+          "wall_ms": 979.179,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 6484
+          },
+          "ttft_ms": 868.876,
+          "frame_gaps_ms": [
+            34.973,
+            38.219
+          ],
+          "wall_ms": 942.121,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1847.49,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 761
+            }
+          },
+          "ttft_ms": 828.82,
+          "frame_gaps_ms": [
+            37.862,
+            38.406,
+            37.582
+          ],
+          "wall_ms": 942.728,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3849
+          },
+          "ttft_ms": 832.213,
+          "frame_gaps_ms": [
+            34.818,
+            37.39
+          ],
+          "wall_ms": 904.511,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1847.521,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 254
+            }
+          },
+          "ttft_ms": 828.935,
+          "frame_gaps_ms": [
+            37.697,
+            38.223,
+            38.016
+          ],
+          "wall_ms": 942.923,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3185
+          },
+          "ttft_ms": 832.136,
+          "frame_gaps_ms": [
+            34.66,
+            37.582
+          ],
+          "wall_ms": 904.43,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1930.098,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 929
+            }
+          },
+          "ttft_ms": 869.5,
+          "frame_gaps_ms": [
+            37.601,
+            38.419,
+            37.466
+          ],
+          "wall_ms": 983.044,
+          "prompt_tokens": 1476,
+          "cached_tokens": 0,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2180
+          },
+          "ttft_ms": 874.054,
+          "frame_gaps_ms": [
+            35.135,
+            37.426
+          ],
+          "wall_ms": 946.81,
+          "prompt_tokens": 1495,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1930.107,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 983
+            }
+          },
+          "ttft_ms": 869.421,
+          "frame_gaps_ms": [
+            37.432,
+            38.427,
+            37.836
+          ],
+          "wall_ms": 983.173,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 6484
+          },
+          "ttft_ms": 873.941,
+          "frame_gaps_ms": [
+            34.821,
+            37.933
+          ],
+          "wall_ms": 946.756,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 416.292,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 761
+            }
+          },
+          "ttft_ms": 113.126,
+          "frame_gaps_ms": [
+            37.128,
+            38.172,
+            37.787
+          ],
+          "wall_ms": 226.394,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3849
+          },
+          "ttft_ms": 116.013,
+          "frame_gaps_ms": [
+            35.364,
+            38.187
+          ],
+          "wall_ms": 189.646,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 415.887,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 254
+            }
+          },
+          "ttft_ms": 112.772,
+          "frame_gaps_ms": [
+            37.39,
+            38.16,
+            38.158
+          ],
+          "wall_ms": 226.533,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3185
+          },
+          "ttft_ms": 115.871,
+          "frame_gaps_ms": [
+            35.141,
+            37.974
+          ],
+          "wall_ms": 189.153,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1932.711,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 968
+            }
+          },
+          "ttft_ms": 871.834,
+          "frame_gaps_ms": [
+            37.553,
+            38.096,
+            37.704
+          ],
+          "wall_ms": 985.294,
+          "prompt_tokens": 1476,
+          "cached_tokens": 0,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 1977
+          },
+          "ttft_ms": 874.513,
+          "frame_gaps_ms": [
+            34.722,
+            37.718
+          ],
+          "wall_ms": 947.16,
+          "prompt_tokens": 1495,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1932.559,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 546
+            }
+          },
+          "ttft_ms": 871.739,
+          "frame_gaps_ms": [
+            37.426,
+            38.09,
+            37.998
+          ],
+          "wall_ms": 985.324,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 6313
+          },
+          "ttft_ms": 874.352,
+          "frame_gaps_ms": [
+            34.709,
+            37.931
+          ],
+          "wall_ms": 947.045,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1855.209,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 248
+            }
+          },
+          "ttft_ms": 831.74,
+          "frame_gaps_ms": [
+            37.436,
+            38.267,
+            37.941
+          ],
+          "wall_ms": 945.426,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2069
+          },
+          "ttft_ms": 836.485,
+          "frame_gaps_ms": [
+            34.869,
+            38.139
+          ],
+          "wall_ms": 909.542,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1854.797,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 627
+            }
+          },
+          "ttft_ms": 831.759,
+          "frame_gaps_ms": [
+            37.366,
+            38.269,
+            37.615
+          ],
+          "wall_ms": 945.066,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3431
+          },
+          "ttft_ms": 836.547,
+          "frame_gaps_ms": [
+            34.96,
+            37.928
+          ],
+          "wall_ms": 909.506,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1892.128,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 968
+            }
+          },
+          "ttft_ms": 868.877,
+          "frame_gaps_ms": [
+            37.493,
+            38.561,
+            37.321
+          ],
+          "wall_ms": 982.318,
+          "prompt_tokens": 1476,
+          "cached_tokens": 0,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 1977
+          },
+          "ttft_ms": 874.826,
+          "frame_gaps_ms": [
+            34.679
+          ],
+          "wall_ms": 909.562,
+          "prompt_tokens": 1495,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1928.816,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 546
+            }
+          },
+          "ttft_ms": 868.835,
+          "frame_gaps_ms": [
+            37.259,
+            38.571,
+            37.673
+          ],
+          "wall_ms": 982.382,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 6313
+          },
+          "ttft_ms": 874.736,
+          "frame_gaps_ms": [
+            34.744,
+            36.696
+          ],
+          "wall_ms": 946.231,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 419.751,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 248
+            }
+          },
+          "ttft_ms": 113.88,
+          "frame_gaps_ms": [
+            37.448,
+            38.453,
+            37.185
+          ],
+          "wall_ms": 227.266,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2069
+          },
+          "ttft_ms": 119.765,
+          "frame_gaps_ms": [
+            34.67,
+            37.618
+          ],
+          "wall_ms": 192.284,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 419.467,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 627
+            }
+          },
+          "ttft_ms": 113.598,
+          "frame_gaps_ms": [
+            37.545,
+            38.548,
+            37.066
+          ],
+          "wall_ms": 226.837,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3431
+          },
+          "ttft_ms": 119.834,
+          "frame_gaps_ms": [
+            34.891,
+            37.501
+          ],
+          "wall_ms": 192.403,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1937.232,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 499
+            }
+          },
+          "ttft_ms": 874.712,
+          "frame_gaps_ms": [
+            37.932,
+            37.895,
+            37.529
+          ],
+          "wall_ms": 988.115,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 7262
+          },
+          "ttft_ms": 876.949,
+          "frame_gaps_ms": [
+            34.299,
+            37.637
+          ],
+          "wall_ms": 948.91,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1936.96,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 669
+            }
+          },
+          "ttft_ms": 874.397,
+          "frame_gaps_ms": [
+            38.001,
+            37.854,
+            37.311
+          ],
+          "wall_ms": 987.698,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3071
+          },
+          "ttft_ms": 877.051,
+          "frame_gaps_ms": [
+            34.329,
+            37.548
+          ],
+          "wall_ms": 949.036,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 418.892,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 623
+            }
+          },
+          "ttft_ms": 108.578,
+          "frame_gaps_ms": [
+            38.117,
+            38.398,
+            37.076
+          ],
+          "wall_ms": 222.345,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 4304
+          },
+          "ttft_ms": 123.127,
+          "frame_gaps_ms": [
+            35.081,
+            38.004
+          ],
+          "wall_ms": 196.27,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 418.791,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 753
+            }
+          },
+          "ttft_ms": 108.498,
+          "frame_gaps_ms": [
+            37.874,
+            38.427,
+            37.583
+          ],
+          "wall_ms": 222.447,
+          "prompt_tokens": 1475,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 6760
+          },
+          "ttft_ms": 123.225,
+          "frame_gaps_ms": [
+            34.781,
+            38.099
+          ],
+          "wall_ms": 196.153,
+          "prompt_tokens": 1494,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1933.885,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 499
+            }
+          },
+          "ttft_ms": 872.807,
+          "frame_gaps_ms": [
+            37.336,
+            38.561,
+            37.379
+          ],
+          "wall_ms": 986.156,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 7262
+          },
+          "ttft_ms": 874.668,
+          "frame_gaps_ms": [
+            34.974,
+            37.668
+          ],
+          "wall_ms": 947.477,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 1,
+      "cache_phase": "initial_group",
+      "wall_ms": 1933.893,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 669
+            }
+          },
+          "ttft_ms": 872.832,
+          "frame_gaps_ms": [
+            37.201,
+            38.567,
+            37.619
+          ],
+          "wall_ms": 986.272,
+          "prompt_tokens": 1475,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 3071
+          },
+          "ttft_ms": 874.503,
+          "frame_gaps_ms": [
+            34.913,
+            37.952
+          ],
+          "wall_ms": 947.424,
+          "prompt_tokens": 1494,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1858.52,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 623
+            }
+          },
+          "ttft_ms": 834.557,
+          "frame_gaps_ms": [
+            37.566,
+            39.255,
+            37.818
+          ],
+          "wall_ms": 949.3,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 4304
+          },
+          "ttft_ms": 835.577,
+          "frame_gaps_ms": [
+            35.28,
+            37.901
+          ],
+          "wall_ms": 908.862,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 1,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1858.496,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 753
+            }
+          },
+          "ttft_ms": 834.577,
+          "frame_gaps_ms": [
+            37.454,
+            39.246,
+            38.174
+          ],
+          "wall_ms": 949.519,
+          "prompt_tokens": 1475,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 6760
+          },
+          "ttft_ms": 835.406,
+          "frame_gaps_ms": [
+            35.164,
+            38.108
+          ],
+          "wall_ms": 908.755,
+          "prompt_tokens": 1494,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    }
+  ],
+  "summary": {
+    "volatile_first": {
+      "initial_group": {
+        "trajectories": 8,
+        "valid_trajectories": 8,
+        "trajectory_p50_ms": 1927.0439999999999,
+        "trajectory_p95_ms": 1933.893,
+        "call": {
+          "ttft_ms_p50": 869.5545,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 0.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1475.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 15.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 37.8915
+        },
+        "answer": {
+          "ttft_ms_p50": 871.761,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 0.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1494.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 9.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 36.314499999999995
+        }
+      },
+      "subsequent_group": {
+        "trajectories": 8,
+        "valid_trajectories": 8,
+        "trajectory_p50_ms": 1851.159,
+        "trajectory_p95_ms": 1858.52,
+        "call": {
+          "ttft_ms_p50": 830.3375,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 64.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1475.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 15.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 37.867000000000004
+        },
+        "answer": {
+          "ttft_ms_p50": 833.8095,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 64.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1494.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 9.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 36.335
+        }
+      }
+    },
+    "catalog_first": {
+      "initial_group": {
+        "trajectories": 8,
+        "valid_trajectories": 8,
+        "trajectory_p50_ms": 1933.5335,
+        "trajectory_p95_ms": 1945.438,
+        "call": {
+          "ttft_ms_p50": 869.4605,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 0.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1475.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 15.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 37.7545
+        },
+        "answer": {
+          "ttft_ms_p50": 874.395,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 0.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1494.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 9.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 35.135
+        }
+      },
+      "subsequent_group": {
+        "trajectories": 8,
+        "valid_trajectories": 8,
+        "trajectory_p50_ms": 419.17949999999996,
+        "trajectory_p95_ms": 419.751,
+        "call": {
+          "ttft_ms_p50": 113.362,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 1408.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1475.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 15.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 37.685
+        },
+        "answer": {
+          "ttft_ms_p50": 119.4645,
+          "ttft_ms_observed": 8,
+          "cached_tokens_p50": 1408.0,
+          "cached_tokens_observed": 8,
+          "prompt_tokens_p50": 1494.0,
+          "prompt_tokens_observed": 8,
+          "completion_tokens_p50": 9.0,
+          "completion_tokens_observed": 8,
+          "sse_frame_gap_p50_ms": 36.4325
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+Row index regression PASS (BF16/FP8, M=256,257,289, N=259, CUDA Graph)

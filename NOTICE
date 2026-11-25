@@ -1,0 +1,10 @@
+Dashport 4090 D inference experiments
+Copyright 2026 Dashport contributors
+
+The compatibility adapter integrates with SGLang v0.5.23 and follows its
+logits processing and speculative decoding interfaces. SGLang is licensed
+under Apache License 2.0. Upstream source and copyright notices are at
+https://github.com/sgl-project/sglang/tree/v0.5.23.
+
+SGLang, PyTorch, XGrammar and the NVIDIA CUDA runtime are dependencies.
+Model weights and tokenizer files are retrieved from their original publishers.

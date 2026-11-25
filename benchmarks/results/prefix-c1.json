@@ -1,0 +1,674 @@
+{
+  "config": {
+    "model": "qwen3.8-27b-fp8",
+    "pairs": 3,
+    "iterations": 2,
+    "concurrency": 1,
+    "seed": 1741,
+    "run_id": "222ca15008914a248084964ab05c1502",
+    "catalog_bytes": 7133,
+    "requests": 24,
+    "dry_run": false
+  },
+  "arm_orders": [
+    [
+      "catalog_first",
+      "volatile_first"
+    ],
+    [
+      "volatile_first",
+      "catalog_first"
+    ],
+    [
+      "volatile_first",
+      "catalog_first"
+    ]
+  ],
+  "trials": [
+    {
+      "pair": 0,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1061.351,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 799
+            }
+          },
+          "ttft_ms": 433.862,
+          "frame_gaps_ms": [
+            35.993,
+            36.999,
+            36.482
+          ],
+          "wall_ms": 543.404,
+          "prompt_tokens": 1480,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5669
+          },
+          "ttft_ms": 445.916,
+          "frame_gaps_ms": [
+            34.153,
+            37.366
+          ],
+          "wall_ms": 517.495,
+          "prompt_tokens": 1499,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1035.695,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 572
+            }
+          },
+          "ttft_ms": 759.078,
+          "frame_gaps_ms": [
+            35.941,
+            36.816,
+            36.162
+          ],
+          "wall_ms": 868.074,
+          "prompt_tokens": 1480,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2134
+          },
+          "ttft_ms": 97.534,
+          "frame_gaps_ms": [
+            33.539,
+            36.249
+          ],
+          "wall_ms": 167.384,
+          "prompt_tokens": 1499,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1066.152,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 799
+            }
+          },
+          "ttft_ms": 434.949,
+          "frame_gaps_ms": [
+            36.506,
+            34.396,
+            36.386
+          ],
+          "wall_ms": 542.31,
+          "prompt_tokens": 1480,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5669
+          },
+          "ttft_ms": 452.505,
+          "frame_gaps_ms": [
+            34.055,
+            36.952
+          ],
+          "wall_ms": 523.573,
+          "prompt_tokens": 1499,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 0,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1049.897,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 572
+            }
+          },
+          "ttft_ms": 434.607,
+          "frame_gaps_ms": [
+            35.831,
+            37.521,
+            36.324
+          ],
+          "wall_ms": 544.388,
+          "prompt_tokens": 1480,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 2134
+          },
+          "ttft_ms": 434.58,
+          "frame_gaps_ms": [
+            34.197,
+            36.34
+          ],
+          "wall_ms": 505.211,
+          "prompt_tokens": 1499,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1079.635,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 259
+            }
+          },
+          "ttft_ms": 452.257,
+          "frame_gaps_ms": [
+            34.117,
+            34.072,
+            36.417
+          ],
+          "wall_ms": 556.917,
+          "prompt_tokens": 1480,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5232
+          },
+          "ttft_ms": 451.381,
+          "frame_gaps_ms": [
+            34.619,
+            36.397
+          ],
+          "wall_ms": 522.457,
+          "prompt_tokens": 1499,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1053.573,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 435
+            }
+          },
+          "ttft_ms": 435.645,
+          "frame_gaps_ms": [
+            36.372,
+            37.039,
+            36.366
+          ],
+          "wall_ms": 545.473,
+          "prompt_tokens": 1480,
+          "cached_tokens": 64,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5202
+          },
+          "ttft_ms": 437.898,
+          "frame_gaps_ms": [
+            33.69,
+            36.207
+          ],
+          "wall_ms": 507.859,
+          "prompt_tokens": 1499,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1082.814,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_order",
+            "args": {
+              "id": 259
+            }
+          },
+          "ttft_ms": 451.181,
+          "frame_gaps_ms": [
+            36.443,
+            37.096,
+            36.233
+          ],
+          "wall_ms": 561.019,
+          "prompt_tokens": 1480,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5232
+          },
+          "ttft_ms": 451.02,
+          "frame_gaps_ms": [
+            34.081,
+            36.381
+          ],
+          "wall_ms": 521.541,
+          "prompt_tokens": 1499,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 373.798,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_account",
+            "args": {
+              "id": 435
+            }
+          },
+          "ttft_ms": 96.641,
+          "frame_gaps_ms": [
+            37.104,
+            36.221,
+            36.292
+          ],
+          "wall_ms": 206.312,
+          "prompt_tokens": 1480,
+          "cached_tokens": 1408,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5202
+          },
+          "ttft_ms": 97.279,
+          "frame_gaps_ms": [
+            33.36,
+            36.507
+          ],
+          "wall_ms": 167.227,
+          "prompt_tokens": 1499,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "volatile_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1084.775,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 829
+            }
+          },
+          "ttft_ms": 450.449,
+          "frame_gaps_ms": [
+            36.432,
+            37.356,
+            36.49
+          ],
+          "wall_ms": 560.897,
+          "prompt_tokens": 1480,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5117
+          },
+          "ttft_ms": 453.663,
+          "frame_gaps_ms": [
+            33.293,
+            36.396
+          ],
+          "wall_ms": 523.573,
+          "prompt_tokens": 1499,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "volatile_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 1052.234,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 992
+            }
+          },
+          "ttft_ms": 433.758,
+          "frame_gaps_ms": [
+            36.384,
+            37.05,
+            36.4
+          ],
+          "wall_ms": 543.777,
+          "prompt_tokens": 1481,
+          "cached_tokens": 64,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 1792
+          },
+          "ttft_ms": 437.676,
+          "frame_gaps_ms": [
+            33.721,
+            36.702
+          ],
+          "wall_ms": 508.159,
+          "prompt_tokens": 1500,
+          "cached_tokens": 64,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "catalog_first",
+      "iteration": 0,
+      "slot": 0,
+      "cache_phase": "initial_group",
+      "wall_ms": 1088.433,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_invoice",
+            "args": {
+              "id": 829
+            }
+          },
+          "ttft_ms": 452.961,
+          "frame_gaps_ms": [
+            36.298,
+            37.036,
+            36.235
+          ],
+          "wall_ms": 562.585,
+          "prompt_tokens": 1480,
+          "cached_tokens": 0,
+          "completion_tokens": 15
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 5117
+          },
+          "ttft_ms": 455.221,
+          "frame_gaps_ms": [
+            33.875,
+            36.285
+          ],
+          "wall_ms": 525.578,
+          "prompt_tokens": 1499,
+          "cached_tokens": 0,
+          "completion_tokens": 9
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "arm": "catalog_first",
+      "iteration": 1,
+      "slot": 0,
+      "cache_phase": "subsequent_group",
+      "wall_ms": 373.626,
+      "phases": {
+        "call": {
+          "valid": true,
+          "actual": {
+            "tool": "lookup_shipment",
+            "args": {
+              "id": 992
+            }
+          },
+          "ttft_ms": 97.713,
+          "frame_gaps_ms": [
+            36.103,
+            36.827,
+            36.2
+          ],
+          "wall_ms": 206.901,
+          "prompt_tokens": 1481,
+          "cached_tokens": 1408,
+          "completion_tokens": 16
+        },
+        "answer": {
+          "valid": true,
+          "actual": {
+            "value": 1792
+          },
+          "ttft_ms": 96.43,
+          "frame_gaps_ms": [
+            33.537
+          ],
+          "wall_ms": 166.472,
+          "prompt_tokens": 1500,
+          "cached_tokens": 1408,
+          "completion_tokens": 9
+        }
+      }
+    }
+  ],
+  "summary": {
+    "volatile_first": {
+      "initial_group": {
+        "trajectories": 3,
+        "valid_trajectories": 3,
+        "trajectory_p50_ms": 1079.635,
+        "trajectory_p95_ms": 1084.775,
+        "call": {
+          "ttft_ms_p50": 450.449,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 0,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1480,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 15,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 36.417
+        },
+        "answer": {
+          "ttft_ms_p50": 452.505,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 0,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1499,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 9,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 35.5075
+        }
+      },
+      "subsequent_group": {
+        "trajectories": 3,
+        "valid_trajectories": 3,
+        "trajectory_p50_ms": 1052.234,
+        "trajectory_p95_ms": 1053.573,
+        "call": {
+          "ttft_ms_p50": 434.607,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 64,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1480,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 15,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 36.384
+        },
+        "answer": {
+          "ttft_ms_p50": 437.676,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 64,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1499,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 9,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 35.202
+        }
+      }
+    },
+    "catalog_first": {
+      "initial_group": {
+        "trajectories": 3,
+        "valid_trajectories": 3,
+        "trajectory_p50_ms": 1082.814,
+        "trajectory_p95_ms": 1088.433,
+        "call": {
+          "ttft_ms_p50": 451.181,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 0,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1480,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 15,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 36.443
+        },
+        "answer": {
+          "ttft_ms_p50": 451.02,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 0,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1499,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 9,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 35.218999999999994
+        }
+      },
+      "subsequent_group": {
+        "trajectories": 3,
+        "valid_trajectories": 3,
+        "trajectory_p50_ms": 373.798,
+        "trajectory_p95_ms": 1035.695,
+        "call": {
+          "ttft_ms_p50": 97.713,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 1408,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1480,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 15,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 36.221
+        },
+        "answer": {
+          "ttft_ms_p50": 97.279,
+          "ttft_ms_observed": 3,
+          "cached_tokens_p50": 1408,
+          "cached_tokens_observed": 3,
+          "prompt_tokens_p50": 1499,
+          "prompt_tokens_observed": 3,
+          "completion_tokens_p50": 9,
+          "completion_tokens_observed": 3,
+          "sse_frame_gap_p50_ms": 33.539
+        }
+      }
+    }
+  }
+}
