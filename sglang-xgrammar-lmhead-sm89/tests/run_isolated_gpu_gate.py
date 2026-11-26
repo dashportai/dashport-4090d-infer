@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import statistics
 import time
 from types import SimpleNamespace
@@ -46,31 +47,55 @@ def summarize(samples: list[float]) -> dict:
     }
 
 
+def _check_all_draft_legal(ids: torch.Tensor, reqs: list[SimpleNamespace]) -> int:
+    illegal = 0
+    ids_cpu = ids.detach().cpu()
+    for b_i, req in enumerate(reqs):
+        g = req.grammar
+        pushed = 0
+        try:
+            for slot in range(1, ids_cpu.shape[1]):
+                tok = int(ids_cpu[b_i, slot].item())
+                mask_bit = g.allowed_masks[(len(g.history) - 1) % 2]
+                if ((mask_bit >> tok) & 1) == 0:
+                    illegal += 1
+                    break
+                g.accept_token(tok)
+                pushed += 1
+        finally:
+            if pushed > 0:
+                g.rollback(pushed)
+    return illegal
+
+
 def run_p1(iters: int) -> list[dict]:
     from sglang_xgrammar_lmhead_sm89.in_draft_xgrammar import (
+        after_draft_runner_forward,
         around_dflash_forward_batch_generation,
         around_grammar_tree_from_linear_chain,
+    )
+
+    sampled_enabled = os.getenv("SGLANG_DFLASH_XGRAMMAR_SAMPLED", "1").strip().lower() not in (
+        "0", "false", "no", "off", ""
     )
 
     def identity(_cls, ids):
         return ids
 
-    def forward(_worker, batch, grammar_barrier=None):
-        return around_grammar_tree_from_linear_chain(identity, None, ids)
-
     fixtures = ((1, "greedy"), (1, "sampled"), (8, "greedy"), (8, "sampled"), (8, "mixed"))
     rows = []
     for batch_size, mode in fixtures:
         reqs = [SimpleNamespace(grammar=ToolCallGrammar()) for _ in range(batch_size)]
-        values = [0.0 if mode == "greedy" or (mode == "mixed" and i % 2 == 0) else 0.3
-                  for i in range(batch_size)]
+        values = [
+            0.0 if mode == "greedy" or (mode == "mixed" and i % 2 == 0) else 0.3
+            for i in range(batch_size)
+        ]
         sampling_info = SimpleNamespace(
             is_all_greedy=mode == "greedy",
             temperatures=torch.tensor(values, device="cuda"),
+            top_ks=torch.full((batch_size,), 16, dtype=torch.int32, device="cuda"),
         )
         batch = SimpleNamespace(has_grammar=True, reqs=reqs, sampling_info=sampling_info)
-        # Contains invalid, forced and already valid draft tokens. Token 13 is already
-        # in slot 1, so a forced proposal that also writes slot 0 produces a duplicate.
         ids_original = torch.tensor([0, 11, 13, 11, 11, 11, 13, 11], device="cuda").repeat(batch_size, 1)
         candidates_original = torch.tensor([11, 13, 17, *range(19, 32)], device="cuda").repeat(batch_size, 7, 1)
         probs_original = torch.tensor([0.65, 0.25, 0.10, *([0.0] * 13)], device="cuda").repeat(batch_size, 7, 1)
@@ -78,9 +103,11 @@ def run_p1(iters: int) -> list[dict]:
         candidates = candidates_original.clone()
         probs = probs_original.clone()
         sampler = SimpleNamespace(candidate_out=candidates, q_out=probs)
+        runner = SimpleNamespace(forward=lambda: SimpleNamespace(can_run_graph=True))
         worker = SimpleNamespace(
+            draft_model_runner=runner,
             _draft_sampler=sampler,
-            _selector_sample=object() if mode != "greedy" else None,
+            _selector_sample=(candidates, probs) if mode != "greedy" else None,
             target_worker=SimpleNamespace(model_runner=SimpleNamespace(model_config=SimpleNamespace(vocab_size=256))),
         )
         barrier_calls = 0
@@ -88,6 +115,11 @@ def run_p1(iters: int) -> list[dict]:
         def barrier():
             nonlocal barrier_calls
             barrier_calls += 1
+
+        def forward(w, _batch, grammar_barrier=None):
+            res = w.draft_model_runner.forward()
+            after_draft_runner_forward(res, w.draft_model_runner)
+            return around_grammar_tree_from_linear_chain(identity, None, ids)
 
         def reset():
             ids.copy_(ids_original)
@@ -115,15 +147,24 @@ def run_p1(iters: int) -> list[dict]:
         greedy_ids_match = torch.equal(ids, expected_greedy) if mode == "greedy" else None
         sorted_candidates = candidates.sort(dim=-1).values
         duplicate_count = (sorted_candidates[..., 1:] == sorted_candidates[..., :-1]).sum().item()
-        correct = rollback_exact and unchanged_q and unchanged_candidates and duplicate_count == 0
-        correct = correct and (greedy_ids_match if mode == "greedy" else unchanged_ids)
+        illegal_tokens = _check_all_draft_legal(ids, reqs)
+        q_sums_ok = bool(((probs.sum(dim=-1) - 1.0).abs() <= 1e-4).all().item())
+
+        if mode == "greedy":
+            correct = rollback_exact and greedy_ids_match and duplicate_count == 0 and illegal_tokens == 0
+        elif sampled_enabled:
+            correct = rollback_exact and duplicate_count == 0 and illegal_tokens == 0 and q_sums_ok
+        else:
+            correct = rollback_exact and unchanged_q and unchanged_candidates and unchanged_ids and duplicate_count == 0
+
         rows.append({
-            "mode": mode, "batch": batch_size, "draft_block": ids.shape[1],
-            "correct": correct, "exact_rollback": rollback_exact, "greedy_ids_match": greedy_ids_match,
-            "unchanged_ids": unchanged_ids, "unchanged_candidates": unchanged_candidates,
-            "unchanged_q": unchanged_q, "duplicate_candidates": duplicate_count,
-            "barrier_calls": barrier_calls, "first_row_ids": ids[0].tolist(),
-            "timing": summarize(durations),
+            "mode": mode, "sampled_enabled": sampled_enabled, "batch": batch_size,
+            "draft_block": ids.shape[1], "correct": correct, "exact_rollback": rollback_exact,
+            "greedy_ids_match": greedy_ids_match, "unchanged_ids": unchanged_ids,
+            "unchanged_candidates": unchanged_candidates, "unchanged_q": unchanged_q,
+            "duplicate_candidates": duplicate_count, "illegal_tokens": illegal_tokens,
+            "q_sums_valid": q_sums_ok, "barrier_calls": barrier_calls,
+            "first_row_ids": ids[0].tolist(), "timing": summarize(durations),
         })
     return rows
 
@@ -144,9 +185,8 @@ def event_times(operation, iters: int) -> dict:
 def run_p2(iters: int) -> list[dict]:
     from sglang_xgrammar_lmhead_sm89.active_row_head import active_row_bf16_lm_head, active_row_fp8_lm_head
 
-    n, k = 2051, 5120  # Partial final 128-row tile and 32-bit mask word.
+    n, k = 2051, 5120
     rng = torch.Generator(device="cpu").manual_seed(92033)
-    # Dyadic data chosen to compare numerical output exactly in both dtypes.
     weights = torch.randint(-1, 2, (n, k), generator=rng, dtype=torch.int8).to(device="cuda")
     weights_bf16 = weights.to(torch.bfloat16) * 0.125
     weights_fp8 = weights.to(torch.float8_e4m3fn)
@@ -176,7 +216,7 @@ def run_p2(iters: int) -> list[dict]:
                 active_row_fp8_lm_head(hidden, weights_fp8, scale, mask, out=out)
 
             for dtype, operation in (("bf16", bf16), ("fp8", fp8)):
-                out.fill_(23.0)  # Detect unwritten legal logits as well as wrong row writes.
+                out.fill_(23.0)
                 timing = event_times(operation, iters)
                 equal = out == ref
                 bad_logits = int((~equal).sum().item())

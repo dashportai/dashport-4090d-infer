@@ -1,8 +1,11 @@
 #include <ATen/cuda/CUDAContext.h>
 #include <c10/cuda/CUDAGuard.h>
+#include <c10/util/Optional.h>
 #include <torch/extension.h>
 #include <torch/library.h>
+
 #include <cstdint>
+#include <tuple>
 
 namespace sglang_xgrammar_lmhead_sm89 {
 
@@ -28,6 +31,17 @@ void launch_active_row_fp8_lm_head(
     int K,
     int mask_words,
     cudaStream_t stream);
+
+bool active_pairs_within_budget_cpu(
+    const at::Tensor& vocab_mask_cpu,
+    int64_t vocab_size,
+    int64_t max_pairs);
+
+std::tuple<int64_t, bool, bool> xgrammar_coupled_step_cpu(
+    at::Tensor& mask_row_cpu, at::Tensor& draft_row_cpu,
+    const c10::optional<at::Tensor>& cand_row_cpu, const c10::optional<at::Tensor>& q_row_cpu,
+    int64_t pos, int64_t vocab_size, bool is_greedy, bool allow_forced_single,
+    double rand_u, bool clear_mask_after = false);
 
 }  // namespace sglang_xgrammar_lmhead_sm89
 
@@ -123,5 +137,18 @@ TORCH_LIBRARY_IMPL(sglang_xgrammar_lmhead_sm89, CUDA, m) {
 }
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
-    m.doc() = "sm_89 xgrammar active-row lm_head CUDA kernels";
+    m.doc() = "sm_89 xgrammar active-row lm_head CUDA and C++ coupled grammar kernels";
+    m.def(
+        "active_pairs_within_budget_cpu",
+        &sglang_xgrammar_lmhead_sm89::active_pairs_within_budget_cpu,
+        py::arg("vocab_mask_cpu"),
+        py::arg("vocab_size"),
+        py::arg("max_pairs"));
+    m.def(
+        "xgrammar_coupled_step_cpu",
+        &sglang_xgrammar_lmhead_sm89::xgrammar_coupled_step_cpu,
+        py::arg("mask_row_cpu"), py::arg("draft_row_cpu"),
+        py::arg("cand_row_cpu"), py::arg("q_row_cpu"),
+        py::arg("pos"), py::arg("vocab_size"), py::arg("is_greedy"),
+        py::arg("allow_forced_single"), py::arg("rand_u"), py::arg("clear_mask_after") = false);
 }

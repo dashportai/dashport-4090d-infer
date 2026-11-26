@@ -5,7 +5,7 @@ FROM upstream AS build
 ENV TORCH_CUDA_ARCH_LIST=8.9
 WORKDIR /tmp/sglang-xgrammar-lmhead-source
 COPY setup.py ./
-COPY csrc/torch_bindings.cpp csrc/active_row_lm_head_sm89.cu ./csrc/
+COPY csrc/torch_bindings.cpp csrc/xgrammar_coupled_cpu.cpp csrc/active_row_lm_head_sm89.cu ./csrc/
 COPY sglang_xgrammar_lmhead_sm89/*.py ./sglang_xgrammar_lmhead_sm89/
 RUN /opt/sglang/bin/python -m pip wheel --no-index --no-deps --no-build-isolation \
     --wheel-dir /tmp/wheels .
@@ -23,4 +23,6 @@ from sglang_xgrammar_lmhead_sm89 import _C
 assert callable(plugin.load())
 assert hasattr(torch.ops.sglang_xgrammar_lmhead_sm89, "active_row_bf16_lm_head")
 assert hasattr(torch.ops.sglang_xgrammar_lmhead_sm89, "active_row_fp8_lm_head")
+assert callable(getattr(_C, "active_pairs_within_budget_cpu", None))
+assert callable(getattr(_C, "xgrammar_coupled_step_cpu", None))
 PY

@@ -7,8 +7,8 @@ import os
 
 from .active_row_head import ensure_extension_loaded
 from .in_draft_xgrammar import (
-    around_dflash_forward_batch_generation,
-    around_grammar_tree_from_linear_chain,
+    after_compute_candidates, after_draft_runner_forward,
+    around_dflash_forward_batch_generation, around_grammar_tree_from_linear_chain,
 )
 from .target_verify_head import (
     after_tp_worker_forward_batch_generation,
@@ -44,6 +44,7 @@ def register() -> None:
     ext_ok = ensure_extension_loaded()
     in_draft = _env_enabled("SGLANG_DFLASH_XGRAMMAR_DRAFT", default="1")
     active_target = _env_enabled("SGLANG_XGRAMMAR_ACTIVE_ROW_TARGET", default="1")
+    sampled_mode = _env_enabled("SGLANG_DFLASH_XGRAMMAR_SAMPLED", default="1")
 
     if in_draft or active_target:
         HookRegistry.register(
@@ -53,6 +54,16 @@ def register() -> None:
         )
 
     if in_draft:
+        HookRegistry.register(
+            "sglang.srt.models.dflash.DFlash2DraftModel.compute_candidates",
+            after_compute_candidates,
+            HookType.AFTER,
+        )
+        HookRegistry.register(
+            "sglang.srt.model_executor.model_runner.ModelRunner.forward",
+            after_draft_runner_forward,
+            HookType.AFTER,
+        )
         HookRegistry.register(
             "sglang.srt.speculative.dflash_worker_v2.GrammarTree.from_linear_chain",
             around_grammar_tree_from_linear_chain,
@@ -87,8 +98,9 @@ def register() -> None:
         )
 
     logger.info(
-        "[xgrammar_lmhead_sm89] Registered hooks (in_draft=%s active_row_target=%s ext_loaded=%s)",
+        "[xgrammar_lmhead_sm89] Registered hooks (in_draft=%s sampled=%s active_row_target=%s ext_loaded=%s)",
         in_draft,
+        sampled_mode,
         active_target,
         ext_ok,
     )
